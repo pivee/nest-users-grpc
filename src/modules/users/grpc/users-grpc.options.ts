@@ -6,6 +6,9 @@ export const usersMicroserviceOptions = {
   transport: Transport.GRPC,
   options: {
     package: 'users',
-    protoPath: join(__dirname, '../../../src/modules/users/users.proto'),
+    protoPath: join(
+      __dirname,
+      '../../../../src/modules/users/grpc/users.proto',
+    ),
   },
 };

@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 import { GrpcMethod, MessagePattern, Payload } from '@nestjs/microservices';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { IAllUsersText, IEmptyString } from './users-grpc.interface';
+import { IAllUsersText, IEmptyString } from './grpc/users-grpc.interface';
 import { UsersService } from './users.service';
 
 @Controller()
