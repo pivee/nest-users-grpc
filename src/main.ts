@@ -1,16 +1,17 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
+import { join } from 'path';
 import { AppModule } from './app.module';
 
 const logger = new Logger('Main');
 
 const microserviceOptions = {
   identifier: 'Users',
-  transport: Transport.TCP,
+  transport: Transport.GRPC,
   options: {
-    host: '127.0.0.1',
-    port: 8877,
+    package: 'app',
+    protoPath: join(__dirname, '../src/app.proto'),
   },
 };
 
@@ -22,7 +23,7 @@ async function bootstrap() {
 
   app.listen(() => {
     logger.debug(
-      `${microserviceOptions.identifier} Microservice is listening on ${microserviceOptions.options.host}:${microserviceOptions.options.port}`,
+      `${microserviceOptions.identifier} gRPC Microservice is listening`,
     );
   });
 }
