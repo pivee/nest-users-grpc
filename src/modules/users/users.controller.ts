@@ -16,7 +16,7 @@ export class UsersController {
 
   @GrpcMethod('UsersController', 'FindAllUsers')
   findAll(): IAllUsersText {
-    return { text: this.usersService.findAll() };
+    return { data: this.usersService.findAll() };
   }
 
   @MessagePattern('findOneUser')

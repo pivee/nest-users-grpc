@@ -10,6 +10,14 @@ service UsersController {
 
 // Declare the types used above
 message Empty {}
+
+message User {
+  string email = 2;
+  string username = 3;
+  string firstName = 4;
+  string lastName = 5;
+}
+
 message AllUsersText {
-  string text = 1;
+  repeated User data = 1;
 }
