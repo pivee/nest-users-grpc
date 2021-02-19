@@ -1,9 +1,9 @@
 syntax = "proto3";
 
-package app;
+package users;
 
 // Declare a Service for each Controller
-service AppController {
+service UsersController {
   // Decklare an RPC for each method that is called via gRPC
   rpc FindAllUsers (EmptyString) returns (AllUsersText);
 }

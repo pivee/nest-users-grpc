@@ -1,16 +1,10 @@
 import { Controller } from '@nestjs/common';
 import { GrpcMethod, MessagePattern, Payload } from '@nestjs/microservices';
-import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { IAllUsersText, IEmptyString } from './users-grpc.interface';
+import { UsersService } from './users.service';
 
-interface IEmptyString {
-  data: string;
-}
-
-interface IAllUsersText {
-  text: string;
-}
 @Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
@@ -20,7 +14,7 @@ export class UsersController {
     return this.usersService.create(createUserDto);
   }
 
-  @GrpcMethod('AppController', 'FindAllUsers')
+  @GrpcMethod('UsersController', 'FindAllUsers')
   findAll(emptyString: IEmptyString, metadata: any): IAllUsersText {
     return { text: this.usersService.findAll() };
   }

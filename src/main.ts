@@ -1,29 +1,19 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
-import { Transport } from '@nestjs/microservices';
-import { join } from 'path';
-import { AppModule } from './app.module';
+import { usersMicroserviceOptions } from './modules/users/users-grpc.options';
+import { UsersModule } from './modules/users/users.module';
 
 const logger = new Logger('Main');
 
-const microserviceOptions = {
-  identifier: 'Users',
-  transport: Transport.GRPC,
-  options: {
-    package: 'app',
-    protoPath: join(__dirname, '../src/app.proto'),
-  },
-};
-
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice(
-    AppModule,
-    microserviceOptions,
+  const usersMicroservice = await NestFactory.createMicroservice(
+    UsersModule,
+    usersMicroserviceOptions,
   );
 
-  app.listen(() => {
+  usersMicroservice.listen(() => {
     logger.debug(
-      `${microserviceOptions.identifier} gRPC Microservice is listening`,
+      `${usersMicroserviceOptions.identifier} gRPC Microservice is listening`,
     );
   });
 }
