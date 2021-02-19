@@ -5,11 +5,11 @@ package users;
 // Declare a Service for each Controller
 service UsersController {
   // Decklare an RPC for each method that is called via gRPC
-  rpc FindAllUsers (EmptyString) returns (AllUsersText);
+  rpc FindAllUsers (Empty) returns (AllUsersText);
 }
 
 // Declare the types used above
-message EmptyString {}
+message Empty {}
 message AllUsersText {
   string text = 1;
 }

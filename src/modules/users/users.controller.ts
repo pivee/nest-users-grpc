@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 import { GrpcMethod, MessagePattern, Payload } from '@nestjs/microservices';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { IAllUsersText, IEmptyString } from './grpc/users-grpc.interface';
+import { IAllUsersText } from './grpc/users-grpc.interface';
 import { UsersService } from './users.service';
 
 @Controller()
@@ -15,7 +15,7 @@ export class UsersController {
   }
 
   @GrpcMethod('UsersController', 'FindAllUsers')
-  findAll(emptyString: IEmptyString, metadata: any): IAllUsersText {
+  findAll(): IAllUsersText {
     return { text: this.usersService.findAll() };
   }
 
