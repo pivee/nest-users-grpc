@@ -1,10 +1,13 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
 import { IUser } from './entities/user.interface';
 
 @Injectable()
 export class UsersService {
+  private logger = new Logger('UsersService');
+
   // TEST: Mocks
   private users: IUser[] = [
     {
@@ -28,7 +31,16 @@ export class UsersService {
   ];
 
   create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+    const newUser = new User({
+      email: createUserDto.email,
+      username: createUserDto.username,
+      firstName: createUserDto.firstName,
+      lastName: createUserDto.lastName,
+      address: createUserDto.address,
+      phone: createUserDto.phone,
+    });
+    this.users.push(newUser);
+    return newUser;
   }
 
   findAll() {

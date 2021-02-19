@@ -13,7 +13,22 @@ export class User extends BaseEntity implements IUser {
   public address: Address;
   public phone: Phone;
 
-  constructor() {
+  constructor({
+    email,
+    username,
+    firstName,
+    lastName,
+    title,
+    address,
+    phone,
+  }: IUser) {
     super();
+    this.email = email;
+    this.username = username;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.title = title;
+    this.address = address;
+    this.phone = phone;
   }
 }

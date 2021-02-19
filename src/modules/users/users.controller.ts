@@ -9,9 +9,9 @@ import { UsersService } from './users.service';
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
-  @MessagePattern('createUser')
+  @GrpcMethod('UsersController', 'CreateUser')
   create(@Payload() createUserDto: CreateUserDto) {
-    return this.usersService.create(createUserDto);
+    return { data: this.usersService.create(createUserDto) };
   }
 
   @GrpcMethod('UsersController', 'FindAllUsers')
