@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package app;
+
+// Declare a Service for each Controller
+service AppController {
+  // Decklare an RPC for each method that is called via gRPC
+  rpc FindAllUsers (EmptyString) returns (AllUsersText);
+}
+
+// Declare the types used above
+message EmptyString {}
+message AllUsersText {
+  string text = 1;
+}
