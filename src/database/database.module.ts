@@ -19,7 +19,7 @@ import { User } from 'src/modules/users/entities/user.entity';
           entities: [User],
           dropSchema: true,
           synchronize: true,
-          logging: true,
+          logging: false,
         };
       },
     }),

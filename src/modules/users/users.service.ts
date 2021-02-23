@@ -1,36 +1,21 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { IUser } from './entities/user.interface';
+import { UserNotFoundException } from './exceptions/user-not-found.exception';
 
 @Injectable()
 export class UsersService {
-  private logger = new Logger('UsersService');
+  private logger = new Logger(UsersService.name);
 
-  // TEST: Mocks
-  private users: IUser[] = [
-    {
-      email: 'piveedj@gmail.com',
-      username: 'pivee',
-      firstName: 'Pivithuru',
-      lastName: 'Jayakody',
-    },
-    {
-      email: 'sahanpd@gmail.com',
-      username: 'sahan',
-      firstName: 'Sahan',
-      lastName: 'Dharmawardhana',
-    },
-    {
-      email: 'samantha@gmail.com',
-      username: 'samantha',
-      firstName: 'Samantha',
-      lastName: 'Samaradiwakara',
-    },
-  ];
+  constructor(
+    @InjectRepository(User) private readonly usersRepository: Repository<User>,
+  ) {}
 
-  create(createUserDto: CreateUserDto) {
+  async create(createUserDto: CreateUserDto) {
+    this.logger.verbose('Create User');
     const newUser = new User({
       email: createUserDto.email,
       username: createUserDto.username,
@@ -39,39 +24,44 @@ export class UsersService {
       address: createUserDto.address,
       phone: createUserDto.phone,
     });
-    this.users.push(newUser);
-    return newUser;
+    const createdUser = await this.usersRepository.create(newUser);
+    await this.usersRepository.save(createdUser);
+    return createdUser;
   }
 
-  findAll() {
-    return this.users;
+  async findAll() {
+    this.logger.verbose('List all Users');
+    return await this.usersRepository.find();
   }
 
-  findOne(id: string) {
-    return this.users.find((user) => user.username === id);
+  async findOne(id: string) {
+    this.logger.verbose(`Find one User by Id "${id}"`);
+    return await this.usersRepository.findOne(id);
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
-    const indexToUpdate = this.users.findIndex((user) => user.username === id);
-    if (indexToUpdate < 0) {
-      throw new NotFoundException();
+  async update(id: string, updateUserDto: UpdateUserDto) {
+    const existingData = await this.usersRepository.findOne(id);
+    if (!existingData) {
+      throw new UserNotFoundException(id);
     } else {
-      const existingData = this.users[indexToUpdate];
       const updatedData = {
         ...existingData,
         ...updateUserDto,
       };
-      this.users[indexToUpdate] = updatedData;
-      return updatedData;
+      await this.usersRepository.update(id, updatedData);
+      return await this.usersRepository.findOne(id);
     }
   }
 
-  remove(id: string) {
-    const indexToDelete = this.users.findIndex((user) => user.username === id);
-    if (indexToDelete < 0) {
-      throw new NotFoundException();
+  async remove(id: string) {
+    const existingData = await this.usersRepository.findOne(id);
+    if (!existingData) {
+      throw new UserNotFoundException(id);
     } else {
-      this.users.splice(indexToDelete, 1);
+      await this.usersRepository.update(id, {
+        isDeleted: true,
+      });
+      await this.usersRepository.softDelete(id);
       return true;
     }
   }

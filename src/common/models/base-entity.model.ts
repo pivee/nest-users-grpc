@@ -17,7 +17,7 @@ export abstract class BaseEntity implements IBaseEntity {
   @CreateDateColumn()
   public createdDate: Date;
 
-  @Column({ type: 'varchar' })
+  @Column({ type: 'varchar', nullable: true })
   public createdBy?: string;
 
   @UpdateDateColumn()
