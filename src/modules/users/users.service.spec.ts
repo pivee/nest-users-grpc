@@ -1,7 +1,5 @@
-import { ConfigService } from '@nestjs/config';
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { mock__configService } from '../../specs/mocks/mock.config.service';
 import { User } from './entities/user.entity';
 import { UsersService } from './users.service';
 
@@ -12,10 +10,6 @@ describe('UsersService', () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         UsersService,
-        {
-          provide: ConfigService,
-          useValue: mock__configService,
-        },
         {
           provide: getRepositoryToken(User),
           useValue: {},
