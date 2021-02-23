@@ -5,23 +5,31 @@ package users;
 // Declare a Service for each Controller
 service UsersController {
   // Decklare an RPC for each method that is called via gRPC
-  rpc CreateUser (User) returns (CreatedUser);
+  rpc CreateUser (User) returns (OneUser);
   rpc FindAllUsers (Empty) returns (AllUsers);
+  rpc FindUserById (UserId) returns (OneUser);
+  rpc UpdateUser (User) returns (OneUser);
+  rpc DeleteUser (UserId) returns (Empty);
 }
 
 // Declare the types used above
 message Empty {}
 
 message User {
-  string email = 1;
-  string username = 2;
-  string firstName = 3;
-  string lastName = 4;
-  string address = 5;
-  string phone = 6;
+  string id = 1;
+  string email = 2;
+  string username = 3;
+  string firstName = 4;
+  string lastName = 5;
+  string address = 6;
+  string phone = 7;
 }
 
-message CreatedUser {
+message UserId {
+  string id = 1;
+}
+
+message OneUser {
   User data = 1;
 }
 

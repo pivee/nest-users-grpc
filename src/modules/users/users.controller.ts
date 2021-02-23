@@ -1,7 +1,8 @@
 import { Controller } from '@nestjs/common';
-import { GrpcMethod, MessagePattern, Payload } from '@nestjs/microservices';
+import { GrpcMethod, Payload } from '@nestjs/microservices';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { UserIdDto } from './dto/user-id.dto';
 import { IAllUsersText } from './grpc/users-grpc.interface';
 import { UsersService } from './users.service';
 
@@ -19,18 +20,18 @@ export class UsersController {
     return { data: this.usersService.findAll() };
   }
 
-  @MessagePattern('findOneUser')
-  findOne(@Payload() id: string) {
-    return this.usersService.findOne(id);
+  @GrpcMethod('UsersController', 'FindUserById')
+  findOne(@Payload() userIdDto: UserIdDto) {
+    return { data: this.usersService.findOne(userIdDto.id) };
   }
 
-  @MessagePattern('updateUser')
+  @GrpcMethod('UsersController', 'UpdateUser')
   update(@Payload() updateUserDto: UpdateUserDto) {
     return this.usersService.update(updateUserDto.id, updateUserDto);
   }
 
-  @MessagePattern('removeUser')
-  remove(@Payload() id: string) {
-    return this.usersService.remove(id);
+  @GrpcMethod('UsersController', 'DeleteUser')
+  remove(@Payload() userIdDto: UserIdDto) {
+    return this.usersService.remove(userIdDto.id);
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
@@ -48,14 +48,31 @@ export class UsersService {
   }
 
   findOne(id: string) {
-    return `This action returns a #${id} user`;
+    return this.users.find((user) => user.username === id);
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+    const indexToUpdate = this.users.findIndex((user) => user.username === id);
+    if (indexToUpdate < 0) {
+      throw new NotFoundException();
+    } else {
+      const existingData = this.users[indexToUpdate];
+      const updatedData = {
+        ...existingData,
+        ...updateUserDto,
+      };
+      this.users[indexToUpdate] = updatedData;
+      return updatedData;
+    }
   }
 
   remove(id: string) {
-    return `This action removes a #${id} user`;
+    const indexToDelete = this.users.findIndex((user) => user.username === id);
+    if (indexToDelete < 0) {
+      throw new NotFoundException();
+    } else {
+      this.users.splice(indexToDelete, 1);
+      return true;
+    }
   }
 }
