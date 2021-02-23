@@ -40,6 +40,7 @@ export class UsersService {
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
+    this.logger.verbose(`Update User with Id "${id}"`);
     const existingData = await this.usersRepository.findOne(id);
     if (!existingData) {
       throw new UserNotFoundException(id);
@@ -54,6 +55,7 @@ export class UsersService {
   }
 
   async remove(id: string) {
+    this.logger.verbose(`Remove User with Id "${id}"`);
     const existingData = await this.usersRepository.findOne(id);
     if (!existingData) {
       throw new UserNotFoundException(id);
