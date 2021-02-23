@@ -1,17 +1,17 @@
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
 import { usersMicroserviceOptions } from './modules/users/grpc/users-grpc.options';
-import { UsersModule } from './modules/users/users.module';
 
 const logger = new Logger('Main');
 
 async function bootstrap() {
-  const usersMicroservice = await NestFactory.createMicroservice(
-    UsersModule,
+  const app = await NestFactory.createMicroservice(
+    AppModule,
     usersMicroserviceOptions,
   );
 
-  usersMicroservice.listen(() => {
+  app.listen(() => {
     logger.debug(
       `${usersMicroserviceOptions.identifier} gRPC Microservice is listening`,
     );
