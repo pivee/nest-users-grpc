@@ -3,6 +3,9 @@ import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from '@hapi/joi';
+import { DatabaseModule } from 'src/database/database.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from './entities/user.entity';
 
 @Module({
   imports: [
@@ -16,6 +19,8 @@ import * as Joi from '@hapi/joi';
         POSTGRES_DB: Joi.string().required(),
       }),
     }),
+    TypeOrmModule.forFeature([User]),
+    DatabaseModule,
   ],
   controllers: [UsersController],
   providers: [UsersService],
